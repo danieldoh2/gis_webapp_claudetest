@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PMTiles Viewer</title>
+
+  <!-- MapLibre GL -->
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+  <!-- PMTiles protocol for MapLibre -->
+  <script src="https://unpkg.com/pmtiles@3.2.1/dist/pmtiles.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">PMTiles <em>Viewer</em></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn-outline" id="btn-load-file" title="Load a local .pmtiles file">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Load File
+        </button>
+        <button class="btn-outline" id="btn-load-url" title="Load a remote .pmtiles URL">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Load URL
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- Legend / Layer Panel -->
+  <aside class="legend-panel" id="legend-panel">
+    <div class="legend-header">
+      <h2>Layers</h2>
+      <button class="legend-toggle" id="legend-collapse" title="Collapse panel">‹</button>
+    </div>
+
+    <div class="legend-body" id="legend-body">
+      <!-- Source info -->
+      <div class="source-info" id="source-info">
+        <div class="source-empty">
+          <span class="source-empty-icon">⬡</span>
+          <p>No PMTiles loaded.<br/>Use the buttons above to load a file or URL.</p>
+        </div>
+      </div>
+
+      <!-- Layer list -->
+      <div class="layer-list" id="layer-list" style="display:none;"></div>
+
+      <!-- Controls -->
+      <div class="layer-controls" id="layer-controls" style="display:none;">
+        <button class="btn-sm" id="btn-show-all">Show All</button>
+        <button class="btn-sm" id="btn-hide-all">Hide All</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Collapsed toggle -->
+  <button class="legend-expand-btn" id="legend-expand" title="Show layers panel" style="display:none;">☰</button>
+
+  <!-- Modals -->
+  <div class="modal-overlay" id="modal-url" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Load PMTiles URL</h3>
+        <button class="modal-close" data-modal="modal-url">✕</button>
+      </div>
+      <div class="modal-body">
+        <label for="url-input">PMTiles URL</label>
+        <input type="url" id="url-input" placeholder="https://example.com/data.pmtiles" autocomplete="off" />
+        <p class="modal-hint">Enter the full URL to a remote .pmtiles file. The server must allow CORS.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" data-modal="modal-url">Cancel</button>
+        <button class="btn-primary" id="btn-url-confirm">Load</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- File input (hidden) -->
+  <input type="file" id="file-input" accept=".pmtiles" style="display:none;" />
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
